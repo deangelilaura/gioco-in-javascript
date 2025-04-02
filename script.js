@@ -1,53 +1,65 @@
-function startGame(){
-    myGameArea.start();
-    myGameArea.draw(redSquare);
-}
+var myGamePiece;
 
-var redSquare = {
-    width: 20,
-    height: 20,
-    x: 10,
-    y: 120,
-    color: "red"
-};
+function startGame() {
+    myGameArea.start();
+    myGamePiece = new component(30, 30, "red", 10, 120);
+}
 
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 480;
         this.canvas.height = 270;
-        this.canvas = this.canvas.getContext("2d");
+        this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.interval = setIinterval(updateGmeArea, 20); //ogni 20ms chiamo il metodo updateGameArea
+        this.interval = setInterval(updateGameArea, 20);
     },
-
-draw: function(component) {
-    this.context.fillStyle = component.color;
-    this.context.fillRect(component.x, component.y, component.width, component.height);
-},
-
-clear: function() {
-    this.context.clearRect(0,0, this.canvas.width, this.canvas.height);
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     }
-};
+}
+
+function component(width, height, color, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y; 
+    this.update = function() {
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }   
+    this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+    }
+}
 
 function updateGameArea() {
     myGameArea.clear();
-    myGameArea.draw(redSquare);
-}
+    myGamePiece.newPos();
+    myGamePiece.update();
+  }
 
-function moveup() {
-    redSquare.y -= 30;
-}
+  function moveup() {
+    myGamePiece.speedY = 1;
+  }
+  
+  function movedown() {
+    myGamePiece.speedY = 1;
+  }
+  
+  function moveleft() {
+    myGamePiece.speedX = 1;
+  }
+  
+  function moveright() {
+    myGamePiece.speedX = 1;
+  }
 
-function movedown() {
-    redSquare.y += 30;
-}
-
-function moveleft() {
-    redSquare.x -= 30;
-}
-
-function moveright() {
-    redSquare.x += 30;
-}
+  function clearmove() {
+    myGamePiece.speedX = 0;
+    myGamePiece.speedY = 0;
+  }
+  
+  
